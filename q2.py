@@ -31,7 +31,7 @@ def word2vec_rep(docs):
 	for document in docs:
 		new_docs.append(preprocessing(document))
 	w2v = load_w2v()
-	for i, doc in enumerate(docs):
+	for i, doc in enumerate(new_docs):
 		mat[i] = string2vec(w2v, doc)
 	return mat
 
