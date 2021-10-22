@@ -94,7 +94,7 @@ def viterbi(hmm, obs):
 			index, viterbi_values[i][j] = v_max(viterbi_values[i-1], obs[i], j, states, hmm)
 			backtracking_matrix[i][j] = index
 	hidden_state_sequence, prob = backtrack(viterbi_values, backtracking_matrix, states)
-	return reversed(hidden_state_sequence), prob
+	return list(reversed(hidden_state_sequence)), prob
 
 def backtrack(viterbi_values, backtracking_matrix, states):
 	obs = len(viterbi_values)
