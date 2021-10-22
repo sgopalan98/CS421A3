@@ -86,16 +86,15 @@ def viterbi(hmm, obs):
 	states_len = len(states)
 	viterbi_values = [[0 for j in range(states_len)] for i in range(len(obs))]
 	backtracking_matrix = [[0 for j in range(states_len)] for i in range(len(obs))]
-	prob = 1
 	for j in range(states_len):
-		viterbi_values[0][j] = hmm.tprob(states[j], 'START') * hmm.tprob(states[j], 'START') *hmm.oprob(obs[0], states[j])
+		viterbi_values[0][j] = hmm.tprob(states[j], 'START') *hmm.oprob(obs[0], states[j])
 		backtracking_matrix[0][j] = -1
 	for i in range(1, len(obs)):
 		for j in range(states_len):
 			index, viterbi_values[i][j] = v_max(viterbi_values[i-1], obs[i], j, states, hmm)
 			backtracking_matrix[i][j] = index
 	hidden_state_sequence, prob = backtrack(viterbi_values, backtracking_matrix, states)
-	return hidden_state_sequence, prob
+	return reversed(hidden_state_sequence), prob
 
 def backtrack(viterbi_values, backtracking_matrix, states):
 	obs = len(viterbi_values)
