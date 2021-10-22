@@ -25,7 +25,7 @@ from utils import *
 # Where, sim (float) is the cosine similarity between vectors a and b. x is the size of the numpy vector. Assume that both vectors are of the same size.
 def cosine_similarity(a, b):
 	# [Your code here]
-	sim = np.dot(a,b)/(np.norm(a)*np.norm(b))
+	sim = np.dot(a,b)/(np.linalg.norm(a)*np.linalg.norm(b))
 	return sim
 
 
