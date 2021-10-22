@@ -24,12 +24,32 @@ from utils import *
 # dim represents the dimensions of word vectors, here dim = 300 for Google News pre-trained vectors
 def word2vec_rep(docs):
 	# [Your code here]
-
 	# Dummy matrix
 	dim = 300
 	mat = np.zeros((len(docs), dim))
+	new_docs = []
+	for document in docs:
+		new_docs.append(preprocessing(document))
+	w2v = load_w2v()
+	for i, doc in enumerate(docs):
+		mat[i] = string2vec(w2v, doc)
 	return mat
 
+def w2v(word2vec, token):
+    word_vector = np.zeros(300,)
+    if token in word2vec.keys():
+        return word2vec[token]
+    return word_vector
+
+
+def string2vec(word2vec, user_input):
+    embedding = np.zeros(300,)
+    preprocessed_input = preprocessing(user_input)
+    tokens = get_tokens(preprocessed_input)
+    for token in tokens:
+        embedding+=w2v(word2vec, token)
+    embedding = embedding/len(tokens)
+    return embedding
 
 # Use the main function to test your code when running it from a terminal
 # Sample code is provided to assist with the assignment, feel free to change/remove it if you want
@@ -42,6 +62,20 @@ def word2vec_rep(docs):
 # Is 'hello' a stopword? False
 # Is 'she' a stopword? True
 # Is 'uic' a stopword? False
+
+def preprocessing(user_input):
+    # Initialize modified_input to be the same as the original user input
+    modified_input = user_input
+
+    # Write your code here:
+    tokens = get_tokens(user_input)
+    no_stop = []
+    for t in tokens:
+        if t not in get_stopwords():
+            no_stop.append(t.lower())
+    modified_input = ' '.join(no_stop)
+    return modified_input
+
 def main():
 	# Initialize the corpus
 	sample_corpus = ['Many buildings at UIC are designed in the brutalist style.',
@@ -54,6 +88,8 @@ def main():
 	tokens = get_tokens(sample_corpus[0])
 	print("Tokens for first document: {0}".format(tokens))
 
+	documents = [preprocessing(document) for document in sample_corpus]
+
 	# We can fetch stopwords and check if a word is a stopword
 	stopwords = get_stopwords()
 	for word in ['he', 'hello', 'she', 'uic']:
@@ -64,6 +100,8 @@ def main():
 	# w2v = load_w2v()
 	# And access these vectors using the dictionary
 	# print(w2v['chicago'])
+	mat = word2vec_rep(sample_corpus)
+	print(mat)
 	
 	
 
