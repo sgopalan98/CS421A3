@@ -120,7 +120,7 @@ def v_max(viterbi_value_1, observation, state_index, states, hmm):
 def argmax(_list):
 	_max = 0
 	for i in range(len(_list)):
-		if(_list > _list[_max]):
+		if(_list[i] > _list[_max]):
 			_max = i
 	return i
 
