@@ -27,12 +27,8 @@ def word2vec_rep(docs):
 	# Dummy matrix
 	dim = 300
 	mat = np.zeros((len(docs), dim))
-	new_docs = []
-	for document in docs:
-		new_docs.append(preprocessing(document))
-	w2v = load_w2v()
-	for i, doc in enumerate(new_docs):
-		mat[i] = string2vec(w2v, doc)
+	for i, doc in enumerate(docs):
+		mat[i] = string2vec(load_w2v(), doc)
 	return mat
 
 def w2v(word2vec, token):
@@ -45,7 +41,7 @@ def w2v(word2vec, token):
 def string2vec(word2vec, user_input):
     embedding = np.zeros(300,)
     preprocessed_input = preprocessing(user_input)
-    tokens = get_tokens(preprocessed_input)
+    tokens = preprocessed_input.split(' ')
     for token in tokens:
         embedding+=w2v(word2vec, token)
     embedding = embedding/len(tokens)
@@ -71,8 +67,9 @@ def preprocessing(user_input):
     tokens = get_tokens(user_input)
     no_stop = []
     for t in tokens:
+        t = t.lower()
         if t not in get_stopwords():
-            no_stop.append(t.lower())
+            no_stop.append(t)
     modified_input = ' '.join(no_stop)
     return modified_input
 
