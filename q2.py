@@ -33,20 +33,37 @@ def word2vec_rep(docs):
 
 def w2v(word2vec, token):
     word_vector = np.zeros(300,)
+    present = False
     if token in word2vec.keys():
-        return word2vec[token]
-    return word_vector
+        word_vector = word2vec[token]
+    if token in word2vec.keys():
+        present = True
+    return word_vector, present
 
 
 def string2vec(word2vec, user_input):
     embedding = np.zeros(300,)
-    preprocessed_input = preprocessing(user_input)
-    tokens = preprocessed_input.split(' ')
+    tokens = preprocessing(user_input)
+    no_present = 0
     for token in tokens:
-        embedding+=w2v(word2vec, token)
-    embedding = embedding/len(tokens)
+        _embedding, present = w2v(word2vec, token)
+        if(present):
+        	embedding += _embedding
+        	no_present += 1
+    if no_present > 0:
+        embedding = embedding/no_present
     return embedding
 
+def preprocessing(user_input):
+
+    # Write your code here:
+    tokens = get_tokens(user_input)
+    no_stop = []
+    for t in tokens:
+        t = t.lower()
+        if t not in get_stopwords():
+            no_stop.append(t)
+    return no_stop
 # Use the main function to test your code when running it from a terminal
 # Sample code is provided to assist with the assignment, feel free to change/remove it if you want
 # You can run the code from terminal as: python3 q2.py
@@ -58,20 +75,6 @@ def string2vec(word2vec, user_input):
 # Is 'hello' a stopword? False
 # Is 'she' a stopword? True
 # Is 'uic' a stopword? False
-
-def preprocessing(user_input):
-    # Initialize modified_input to be the same as the original user input
-    modified_input = user_input
-
-    # Write your code here:
-    tokens = get_tokens(user_input)
-    no_stop = []
-    for t in tokens:
-        t = t.lower()
-        if t not in get_stopwords():
-            no_stop.append(t)
-    modified_input = ' '.join(no_stop)
-    return modified_input
 
 def main():
 	# Initialize the corpus
@@ -98,7 +101,7 @@ def main():
 	# And access these vectors using the dictionary
 	# print(w2v['chicago'])
 	mat = word2vec_rep(sample_corpus)
-	print(mat)
+	print(mat.shape)
 	
 	
 
