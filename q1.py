@@ -114,7 +114,7 @@ def v_max(viterbi_value_1, observation, state_index, states, hmm):
 	for j in range(states_len):
 		new_viterbi_value.append(viterbi_value_1[j] * hmm.tprob(states[state_index], states[j]) * hmm.oprob(observation, states[state_index]))
 	prob = max(new_viterbi_value)
-	new_state_index = argmax(prob)
+	new_state_index = argmax(new_viterbi_value)
 	return new_state_index, prob
 
 def argmax(_list):
