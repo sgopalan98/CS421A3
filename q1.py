@@ -100,7 +100,7 @@ def backtrack(viterbi_values, backtracking_matrix, states):
 	obs = len(viterbi_values)
 	hidden_state_sequence = []
 	prob = max(viterbi_values[obs-1])
-	last_state = viterbi_values[obs-1].index(prob)
+	last_state = argmax(viterbi_values[obs-1])
 	hidden_state_sequence.append(states[last_state])
 	for i in reversed(range(1, obs)):
 		last_state = backtracking_matrix[i][last_state]
@@ -114,8 +114,15 @@ def v_max(viterbi_value_1, observation, state_index, states, hmm):
 	for j in range(states_len):
 		new_viterbi_value.append(viterbi_value_1[j] * hmm.tprob(states[state_index], states[j]) * hmm.oprob(observation, states[state_index]))
 	prob = max(new_viterbi_value)
-	new_state_index = new_viterbi_value.index(prob)
+	new_state_index = argmax(prob)
 	return new_state_index, prob
+
+def argmax(_list):
+	_max = 0
+	for i in range(len(_list)):
+		if(_list > _list[_max]):
+			_max = i
+	return i
 
 
 # Use this main function to test your code when running it from a terminal
